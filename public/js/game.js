@@ -6,6 +6,7 @@ let game = {
   init: function() {
     // initialize other objects.
     levels.init();
+    loader.init();
 
     // hide all game layers and display start screen
     $('.gamelayer').hide();
@@ -100,6 +101,22 @@ let loader = {
 
   item_loaded: function() {
     loader.loaded_count++;
+
+    $('#loadingmessage').html(`Loaded ${loader.loaded_count} of ${loader.total_count}`);
+
+    if(loader.loaded_count === loader.total_count) {
+      // loader has loaded completely..
+      loader.loaded = true;
+
+      // hide loading Screen
+      $('#loadingscreen').hide();
+
+      // call loader.onload method if it exists
+      if (loader.onload) {
+        loader.onload();
+        loader.onload = undefined;
+      }
+    }
   }
 };
 
