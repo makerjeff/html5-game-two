@@ -23,28 +23,47 @@ let game = {
     $('#levelselectscreen').show('slow');
   },
 
-  // Load all data and images for a specific level
-  load: function(number) {
-    // declare a new current level object
-    game.current_level = {number: number, hero: []};
-    game.score = 0;
-    $('#score').html(`Score: ${game.score}`);
+  // Game mode
+  mode: 'intro',
 
-    let level = levels.data[number];
+  // X&Y coordinates of sligshot
+  slingshot_x: 140,
+  slingshot_y: 280,
 
-    // load the background, foreground, and slingshot images
-    game.current_level.background_image = loader.load_image(`./images/backgrounds/${level.background}.png`);
-    game.current_level.foreground_image = loader.load_image(`./images/backgrounds/${level.foreground}.png`);
-    game.slingshot_image = loader.load_image(`./images/slingshot-front.png`);
-    game.slingshot_front = loader.load_image(`./images/slingshot-front.png`);
+  start: function() {
+    $('.gamelayer').hide();
 
-    // call game.start() once the assets have loaded.
-    if (loader.loaded) {
-      game.start();
-    } else {
-      loader.onload = game.start;
+    // display the game canvas and scorescreen
+    $('#gamecanvas').show();
+    $('#scorescreen').show();
+
+    game.mode = 'intro';
+    game.offset_left = 0; //tracks current position
+    game.ended = false;
+    game.animationFrame = window.requestAnimationFrame(game.animate, game.canvas);
+  },
+
+  handle_panning: function() {
+    game.offset_left++; // temporary placeholder - continues to pan to the right
+  },
+
+  animate: function() {
+    //temp:
+    game.handle_panning();  
+
+    // animate the backgrounds
+    // draw background with parallax scrolling
+    game.context.drawImage(game.current_level.background_image, game.offset_left/4, 0, 640, 480, 0, 0, 640, 480);
+    game.context.drawImage(game.current_level.foreground_image, game.offset_left, 0, 640, 480, 0, 0, 640, 480);
+
+    // draw the slingshot
+    game.context.drawImage(game.slingshot_image, game.slingshot_x - game.offset, game.slingshot_y);
+    game.context.drawImage(game.slingshot_front, game.slingshot_x - game.offset, game.slingshot_y);
+
+    if (!game.ended) {
+      game.animationFrame = window.requestAnimationFrame(game.animate, game.canvas);
     }
-  }
+  },
 
 
 };
@@ -88,7 +107,27 @@ let levels = {
   },
 
   // Load all data and images for a specific level
-  load: function() {},
+  load: function(number) {
+    // declare a new current level object
+    game.current_level = {number: number, hero: []};
+    game.score = 0;
+    $('#score').html(`Score: ${game.score}`);
+
+    let level = levels.data[number];
+
+    // load the background, foreground, and slingshot images
+    game.current_level.background_image = loader.load_image(`./images/backgrounds/${level.background}.png`);
+    game.current_level.foreground_image = loader.load_image(`./images/backgrounds/${level.foreground}.png`);
+    game.slingshot_image = loader.load_image(`./images/slingshot-front.png`);
+    game.slingshot_front = loader.load_image(`./images/slingshot-front.png`);
+
+    // call game.start() once the assets have loaded.
+    if (loader.loaded) {
+      game.start();
+    } else {
+      loader.onload = game.start;
+    }
+  },
 };
 
 
@@ -125,6 +164,10 @@ let loader = {
   },
 
   item_loaded: function() {
+
+    //temp:
+    console.log('JWX: item loaded: ' + loader.loader_count);
+
     loader.loaded_count++;
 
     $('#loadingmessage').html(`Loaded ${loader.loaded_count} of ${loader.total_count}`);
