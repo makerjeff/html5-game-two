@@ -21,7 +21,32 @@ let game = {
   showLevelScreen: function() {
     $('.gamelayer').hide();
     $('#levelselectscreen').show('slow');
+  },
+
+  // Load all data and images for a specific level
+  load: function(number) {
+    // declare a new current level object
+    game.current_level = {number: number, hero: []};
+    game.score = 0;
+    $('#score').html(`Score: ${game.score}`);
+
+    let level = levels.data[number];
+
+    // load the background, foreground, and slingshot images
+    game.current_level.background_image = loader.load_image(`./images/backgrounds/${level.background}.png`);
+    game.current_level.foreground_image = loader.load_image(`./images/backgrounds/${level.foreground}.png`);
+    game.slingshot_image = loader.load_image(`./images/slingshot-front.png`);
+    game.slingshot_front = loader.load_image(`./images/slingshot-front.png`);
+
+    // call game.start() once the assets have loaded.
+    if (loader.loaded) {
+      game.start();
+    } else {
+      loader.onload = game.start;
+    }
   }
+
+
 };
 
 // --- levels object ---
