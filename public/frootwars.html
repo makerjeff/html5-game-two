@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Froot Wars</title>
+    <link rel="stylesheet" href="./css/game.css">
+
+
+  </head>
+  <body>
+
+    <!-- GAME CONTAINER -->
+    <div id="gamecontainer">
+      <canvas id="gamecanvas" width="640" height="480" class="gamelayer">
+        If you can read this, your browser sucks.
+      </canvas>
+
+      <!-- SCORE SCREEN -->
+      <div id="scorescreen" class="gamelayer">
+        <img id="togglemusic" src="./images/icons/sound.png">
+        <img src="./images/icons/prev.png">
+        <span id="score">Score: 0</span>
+      </div>
+
+      <!-- GAME START SCREEN -->
+      <div id="gamestartscreen" class="gamelayer">
+        <img src="./images/icons/play.png" alt="Play Game" onclick="game.showLevelScreen()"><br>
+        <img src="./images/icons/settings.png" alt="Settings">
+      </div>
+
+      <!-- LEVEL SELECT SCREEN -->
+      <div id="levelselectscreen" class="gamelayer"></div>
+
+      <!-- LOADING SCREEN -->
+      <div id="loadingscreen" class="gamelayer">
+        <div id="loadingmessage"></div>
+      </div>
+
+      <!-- ENDING SCREEN -->
+      <div id="endingscreen" class="gamelayer">
+        <div>
+          <p id="endingmessage">The Level Is Over Message</p>
+          <p id="playcurrentlevel"> <img src="./images/icons/prev.png"> Replay Current Level</p>
+          <p id="playnextlevel"> <img src="./images/icons/next.png">Play Next Level</p>
+          <p id="showLevelScreen"> <img src="./images/icons/return.png">Return to Level Screen</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Scripts -->
+    <script src="./lib/jquery.min.js"></script>
+    <script src="./js/game.js"></script>
+  </body>
+</html>
