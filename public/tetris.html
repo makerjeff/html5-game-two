@@ -14,12 +14,6 @@
 
       context.scale(20,20);
 
-      const matrix = [
-        [0, 0, 0],
-        [1, 1, 1],
-        [0, 1, 0]
-      ];
-
       // collide
       function collide(arena, player) {
         const [m, o] = [player.matrix, player.pos];
@@ -44,6 +38,75 @@
         return matrix;
       }
 
+      function create_piece(type) {
+
+
+        switch(type) {
+          case 'T':
+            return [
+              [0,0,0],
+              [1,1,1],
+              [0,1,0]
+            ]
+            break;
+
+          case 'O':
+            return [
+              [1,1],
+              [1,1]
+            ]
+            break;
+
+          case 'L':
+            return [
+              [0,1,0],
+              [0,1,0],
+              [0,1,1]
+            ]
+            break;
+
+          case 'J':
+            return [
+              [0,1,0],
+              [0,1,0],
+              [1,1,0]
+            ]
+            break;
+
+          case 'I':
+            return [
+              [0,1,0,0],
+              [0,1,0,0],
+              [0,1,0,0],
+              [0,1,0,0]
+            ]
+            break;
+
+          case 'S':
+            return [
+              [0,1,1],
+              [1,1,0],
+              [0,0,0]
+            ]
+            break;
+
+          case 'Z':
+            return [
+              [1,1,0],
+              [0,1,1],
+              [0,0,0]
+            ]
+            break;
+
+          default:
+            return [
+              [0,0,0],
+              [1,1,1],
+              [0,1,0]
+            ]
+        }
+      }
+
 
       function draw_matrix(matrix, offset) {
         // magic of drawing a 2-dimensional array
@@ -63,7 +126,8 @@
         if (collide(arena, player)) {
           player.pos.y--;       //move back up one
           merge(arena, player); //merge player piece to arena
-          player.pos.y = 0;     //reset player back to top
+
+          player_reset();     // create shape and move back to top center
         }
         drop_counter = 0; // prevents drops from stacking.
       }
@@ -76,7 +140,6 @@
       }
 
       function player_rotate(dir) {
-
         const pos = player.pos.x;
         let offset = 1;     // temp offset for brick rotation
         rotate(player.matrix, dir); // attempt to rotate
@@ -92,7 +155,21 @@
               return;
             }
           }
+      }
 
+      function player_reset() {
+        const pieces = 'ILJOTSZ';
+
+        player.matrix = create_piece(pieces[Math.floor(Math.random() * pieces.length)]);
+        player.pos.y = 0;
+        player.pos.x = (arena[0].length /2 | 0) - (player.matrix[0].length / 2 | 0);
+
+        // detect end
+        if (collide(arena, player)) {
+          arena.forEach((row)=> {
+            row.fill(0);
+          });
+        }
       }
 
       function rotate(matrix, dir) {
@@ -161,7 +238,7 @@
       // wrap pos and matrix reference into player object
       const player = {
         pos: {x: 5, y: 5},
-        matrix: matrix
+        matrix: create_piece('T')
       };
 
 
