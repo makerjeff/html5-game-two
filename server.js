@@ -18,5 +18,5 @@ app.use(express.static('public/'));
 
 http.listen(3000, () => {
   clear();
-  console.log(`Server started on ${chalk.green('3000')}`);
+  console.log(`"${chalk.blue(server_name)}" started on ${chalk.green('3000')}`);
 });
